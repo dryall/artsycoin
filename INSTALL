@@ -1,0 +1,9 @@
+Building Banksycoin
+
+See doc/readme-qt.rst for instructions on building Banksycoin QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of Banksycoin.
+
+See doc/build-*.txt for instructions on building Banksycoind,
+the intended-for-services, no-graphical-interface, reference
+implementation of Banksycoin.
