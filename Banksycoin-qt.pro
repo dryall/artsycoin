@@ -118,9 +118,9 @@ contains(BCINNIOIN_NEED_QT_PLUGINS, 1) {
 # regenerate src/build.h
 !windows|contains(USE_BUILD_INFO, 1) {
     genbuild.depends = FORCE
-    genbuild.commands = cd $$PWD; /bin/sh share/genbuild.sh $$OUT_PWD/build/build.h
-    genbuild.target = $$OUT_PWD/build/build.h
-    PRE_TARGETDEPS += $$OUT_PWD/build/build.h
+    genbuild.commands = cd $$PWD; /bin/sh share/genbuild.sh $$OUT_PWD/src/build.h
+    genbuild.target = $$OUT_PWD/src/build.h
+    PRE_TARGETDEPS += $$OUT_PWD/src/build.h
     QMAKE_EXTRA_TARGETS += genbuild
     DEFINES += HAVE_BUILD_INFO
 }
@@ -206,9 +206,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/rpcconsole.h \
     src/version.h \
     src/netbase.h \
-    src/clientversion.h\
-    src/qt/blockbrowser.h
-    src/qt/macnotificationhandler.h \
+    src/clientversion.h \
+    src/qt/blockbrowser.h \
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
@@ -342,7 +341,7 @@ isEmpty(BOOST_LIB_SUFFIX) {
 }
 
 isEmpty(BOOST_THREAD_LIB_SUFFIX) {
-    BOOST_THREAD_LIB_SUFFIX =-mgw48-mt-s-1_54#$$BOOST_LIB_SUFFIX
+    BOOST_THREAD_LIB_SUFFIX =#$$BOOST_LIB_SUFFIX
 }
 
 isEmpty(BDB_LIB_PATH) {
