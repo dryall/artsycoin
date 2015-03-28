@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-#include "blockbrowser.h"
 #include "init.h"
+
 class TransactionTableModel;
 class ClientModel;
 class WalletModel;
@@ -15,8 +15,6 @@ class SendCoinsDialog;
 class SignVerifyMessageDialog;
 class Notificator;
 class RPCConsole;
-class BlockBrowser;
-class ChatWindow;  // NEW IRC
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -59,9 +57,7 @@ protected:
 private:
     ClientModel *clientModel;
     WalletModel *walletModel;
-    BlockBrowser *blockBrowser;
     QStackedWidget *centralWidget;
-ChatWindow *chatWindow;
 
     OverviewPage *overviewPage;
     QWidget *transactionsPage;
@@ -95,8 +91,6 @@ ChatWindow *chatWindow;
     QAction *changePassphraseAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
-    QAction *blockAction;
-    QAction * chatAction;  // IRC
     QAction *miningOffAction;
     QAction *miningOneAction;
     QSystemTrayIcon *trayIcon;
@@ -153,10 +147,6 @@ private slots:
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage();
-
-    void gotoBlockBrowser();
-
-    void gotoChatPage();
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");

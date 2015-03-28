@@ -15,10 +15,10 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA*/
 
 #include "serveur.h"
-#include "chatwindow.h"
+
         QStringList users;
         bool delist = true;
-        ChatWindow *ch;
+
 Serveur::Serveur()
 {
 	connect(this, SIGNAL(readyRead()), this, SLOT(readServeur()));

@@ -25,8 +25,6 @@
 #include "notificator.h"
 #include "guiutil.h"
 #include "rpcconsole.h"
-#include "blockbrowser.h"     // Block Explorer
-#include "chatwindow.h"
 
 
 #ifdef Q_OS_MAC
@@ -56,11 +54,8 @@
 #include <QDesktopServices>
 #include <QTimer>
 #include <QDragEnterEvent>
-#if QT_VERSION < 0x050000
 #include <QUrl>
-#endif
 #include <QStyle>
-#include "blockbrowser.h"
 #include <iostream>
 
 BitcoinGUI::BitcoinGUI(QWidget *parent):
@@ -105,35 +100,15 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
  //   p.setColor(QPalette::Window, QColor(0x22, 0x22, 0x22));
  //   p.setColor(QPalette::Button, QColor(0x22, 0x22, 0x22));
  //   p.setColor(QPalette::Mid, QColor(0x22, 0x22, 0x22));
-  //  p.setColor(QPalette::Base, QColor(0x22, 0x22, 0x22));
-  //  p.setColor(QPalette::AlternateBase, QColor(0x22, 0x22, 0x22));
-  //  setPalette(p);
+ //  p.setColor(QPalette::Base, QColor(0x22, 0x22, 0x22));
+ //  p.setColor(QPalette::AlternateBase, QColor(0x22, 0x22, 0x22));
+ //  setPalette(p);
  //   QFile style(":/text/res/text/style.qss");
  //   style.open(QFile::ReadOnly);
-  //  setStyleSheet(QString::fromUtf8(style.readAll()));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ //  setStyleSheet(QString::fromUtf8(style.readAll()));
 
     // Create tabs
     overviewPage = new OverviewPage();
-    blockBrowser = new BlockBrowser(this);
-
-    chatWindow = new ChatWindow(this);    // IRC
     transactionsPage = new QWidget(this);
     QVBoxLayout *vbox = new QVBoxLayout();
     transactionView = new TransactionView(this);
@@ -154,9 +129,6 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     centralWidget->addWidget(addressBookPage);
     centralWidget->addWidget(receiveCoinsPage);
     centralWidget->addWidget(sendCoinsPage);
-    centralWidget->addWidget(chatWindow);
-    centralWidget->addWidget(blockBrowser);
-   // centralWidget->addWidget(chatWindow);
     setCentralWidget(centralWidget);
 
     // Create status bar
@@ -222,8 +194,6 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     // Clicking on "Sign Message" in the receive coins page sends you to the sign message tab
     connect(receiveCoinsPage, SIGNAL(signMessage(QString)), this, SLOT(gotoSignMessageTab(QString)));
 
-     connect(blockAction, SIGNAL(triggered()), this, SLOT(gotoBlockBrowser()));
-
     gotoOverviewPage();
 }
 
@@ -270,21 +240,6 @@ void BitcoinGUI::createActions()
     addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(addressBookAction);
 
-
-
-    blockAction = new QAction(QIcon(":/icons/bexx"), tr("&Block Explorer"), this);
-    blockAction->setToolTip(tr("Explore the BlockChain"));
-    blockAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
-    blockAction->setCheckable(true);
-    tabGroup->addAction(blockAction);
-
-
-    chatAction = new QAction(QIcon(":/icons/social"), tr("&Social"), this);
-    chatAction->setToolTip(tr("View chat"));
-    chatAction->setCheckable(true);
-    tabGroup->addAction(chatAction);
-
-
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
     connect(sendCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -294,8 +249,6 @@ void BitcoinGUI::createActions()
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(addressBookAction, SIGNAL(triggered()), this, SLOT(gotoAddressBookPage()));
-    connect(chatAction, SIGNAL(triggered()), this, SLOT(gotoChatPage()));
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
     quitAction->setToolTip(tr("Quit application"));
@@ -402,8 +355,6 @@ void BitcoinGUI::createToolBars()
     toolbar->addAction(receiveCoinsAction);
     toolbar->addAction(historyAction);
     toolbar->addAction(addressBookAction);
-    toolbar->addAction(blockAction);
-    toolbar->addAction(chatAction);
     QToolBar *toolbar2 = addToolBar(tr("Actions toolbar"));
     toolbar2->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar2->addAction(exportAction);
@@ -791,28 +742,6 @@ void BitcoinGUI::gotoOverviewPage()
 
     exportAction->setEnabled(false);
     disconnect(exportAction, SIGNAL(triggered()), 0, 0);
-}
-
-
-void BitcoinGUI::gotoBlockBrowser()
-{
-    blockAction->setChecked(true);
-    centralWidget->setCurrentWidget(blockBrowser);
-
-    exportAction->setEnabled(false);
-   disconnect(exportAction, SIGNAL(triggered()), 0, 0);
-
-
-}
-
-
-void BitcoinGUI::gotoChatPage()
-{
-    chatAction->setChecked(true);
-    centralWidget->setCurrentWidget(chatWindow);
-    exportAction->setVisible(false);
-        exportAction->setEnabled(false);
-        disconnect(exportAction, SIGNAL(triggered()), 0, 0);
 }
 
 void BitcoinGUI::gotoHistoryPage()
